@@ -74,6 +74,14 @@ class Featuring(nn.Module):
         self.encoder = TransformerEncoder(layer, n_layers=n_layers)
         self.proj2 = nn.Linear(d_model, feature_dim)
 
+        self.conv1 = nn.Conv1d(embed_dim, feature_dim, kernel_size=3,
+                               padding=1)
+        self.pool = nn.MaxPool1d(kernel_size=3, stride=3)
+        self.conv2 = nn.Conv1d(2 * feature_dim, feature_dim, kernel_size=3,
+                               padding=1)
+        self.conv3 = nn.Conv1d(2 * feature_dim, feature_dim, kernel_size=3,
+                               padding=1)
+
     def forward(self, x):
         # x (b, l)
         x = self.embedding(x)  # b, l, embed_dim
